@@ -19,15 +19,25 @@ class MailConverter(cmd.Cmd):
 
     def do_iterate_path(self, strarg=None):
         counter = 0
+        with open(self.path + '/results/result.json', 'a') as fp:
+            fp.write('{	"' + self.category + '":[')
+            first = True
         for filename in os.listdir(self.path):
             try:
                 counter += 1
                 x = BasicMailInformation(self.path + filename, counter, self.category)
                 x.detailed_parsing(x.crude_parsing())
                 with open(self.path + '/results/result.json', 'a') as fp:
+                    if first:
+                        first = False
+                    else:
+                        fp.write(",\n")
                     json.dump(x.__dict__, fp)
             except IOError as e:
                 pass
+        with open(self.path + '/results/result.json', 'a') as fp:
+            fp.write(']}')
+
 
     def do_exit(self, strarg=None):
         """
