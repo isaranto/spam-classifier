@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from __future__ import division
-
+from bs4 import BeautifulSoup
 import cmd
 import json
 import os
@@ -69,6 +69,10 @@ class BasicMailInformation:
                            "content-transfer-encoding:", "x-bcc:", "x-filename", "subject:", "message-id:", "x-origin:"]
         with open(self.origin_file) as f:
             for line in f:
+                try:
+                    line = BeautifulSoup(line, "html.parser").getText()
+                except Exception as e:
+                    line = ""
                 line = line.lower()
                 if line in ['\n', '\r\n']:
                     crude_list.append("content: " + line.strip())
@@ -78,7 +82,7 @@ class BasicMailInformation:
                         if line.startswith(field):
                             content = True
                             crude_list.append(line.strip())
-                    if not content:
+                    if not content and len(crude_list)>0:
                         crude_list[len(crude_list)-1] += " " + line.strip()
         return crude_list
 

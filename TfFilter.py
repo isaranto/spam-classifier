@@ -1,8 +1,14 @@
 from __future__ import division
 from collections import Counter
-import glob, os, ntpath, json, io, math
+import glob
+import os
+import ntpath
+import json
+import io
+import math
 
-class TfFilter():
+
+class TfFilter:
     def __init__(self, filepath):
         self.filepath = filepath
 
@@ -99,3 +105,4 @@ if __name__ == '__main__':
     global_tf = filter.global_tf()
     idf = filter.global_idf(global_tf, noEmails)
     tf_idf_dict = filter.tf_Idf_global(global_tf, idf)
+    print tf_idf_dict
