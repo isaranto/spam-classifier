@@ -71,6 +71,11 @@ class BasicMailInformation:
         with open(self.origin_file) as f:
             for line in f:
                 line = line.decode("utf-8", "ignore").encode("utf-8").lower()
+                try:
+                    line = BeautifulSoup(line, "html.parser").getText()
+                except Exception as e:
+                    line = ""
+                line = line.lower()
                 if line in ['\n', '\r\n']:
                     crude_list.append("content: " + line.strip())
                 else:
